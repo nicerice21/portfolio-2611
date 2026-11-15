@@ -1,0 +1,427 @@
+﻿<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ricezero — Portfolio Mockup</title>
+<meta name="description" content="Markdownドキュメント風のポートフォリオ・モックアップ" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23fbfaf8'/%3E%3Ctext x='16' y='23' font-family='monospace' font-size='17' font-weight='bold' fill='%231b1a17' text-anchor='middle'%3Er%3C/text%3E%3Ccircle cx='25' cy='9' r='3' fill='%23e85d1f'/%3E%3C/svg%3E" />
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #fffcf7;
+    --ink: #1b1a17;
+    --muted: #6e6862;
+    --faint: #9a938b;
+    --line: #e4e0d8;
+    --code: #f1ede5;
+    --accent: #e85d1f;
+    --accent-ink: #b8430b;
+
+    /* background washes (decorative only) */
+    --wash-sky: #ddf2f7;
+    --wash-pink: #f8e0e8;
+    --wash-cream: #fff1c9;
+    --wash-mint: #e2f1e6;
+
+    --font-body: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", "Cascadia Code", "Consolas", monospace;
+
+    --measure: 46rem;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    position: relative;
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.85;
+    font-feature-settings: "palt" 1;
+    overflow-x: clip;
+  }
+
+  /* paper grain: fixed, behind everything */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 140px 140px;
+  }
+
+  /* watercolor washes + confetti: page top only, behind content */
+  .bg {
+    position: absolute;
+    inset: 0 0 auto;
+    height: min(120vh, 1100px);
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-image:
+      radial-gradient(46vw 40vw at -6% -8%, rgba(221, 242, 247, 0.85), rgba(221, 242, 247, 0) 70%),
+      radial-gradient(24vw 20vw at 17% 3%, rgba(248, 224, 232, 0.45), rgba(248, 224, 232, 0) 70%),
+      radial-gradient(40vw 34vw at 106% -4%, rgba(255, 241, 201, 0.9), rgba(255, 241, 201, 0) 72%),
+      radial-gradient(34vw 38vw at 108% 46%, rgba(248, 224, 232, 0.55), rgba(248, 224, 232, 0) 70%),
+      radial-gradient(32vw 28vw at -8% 66%, rgba(226, 241, 230, 0.45), rgba(226, 241, 230, 0) 70%),
+      radial-gradient(circle at 5% 14%, rgba(246, 195, 212, 0.9) 0 3px, transparent 3.5px),
+      radial-gradient(circle at 12% 30%, rgba(191, 228, 241, 0.9) 0 2.5px, transparent 3px),
+      radial-gradient(circle at 93% 8%, rgba(255, 228, 166, 0.95) 0 3.5px, transparent 4px),
+      radial-gradient(circle at 96% 27%, rgba(246, 195, 212, 0.85) 0 2px, transparent 2.5px),
+      radial-gradient(circle at 3% 48%, rgba(226, 241, 230, 0.95) 0 2.5px, transparent 3px),
+      radial-gradient(circle at 90% 60%, rgba(191, 228, 241, 0.7) 0 2px, transparent 2.5px);
+  }
+
+  /* a few paper confetti squares */
+  .bg::after {
+    content: "";
+    position: absolute;
+    left: 7%;
+    top: 9%;
+    width: 7px;
+    height: 7px;
+    background: #f6c3d4;
+    opacity: 0.85;
+    transform: rotate(16deg);
+    box-shadow:
+      7vw 3vh 0 0 #ffe4a6,
+      78vw 1vh 0 0 #f7cad9,
+      84vw 28vh 0 0 #bfe4f1,
+      -3vw 40vh 0 0 #ffe9b8,
+      80vw 62vh 0 0 #e2f1e6;
+  }
+
+  .doc { position: relative; z-index: 1; max-width: var(--measure); margin-inline: auto; padding: 56px 24px 96px; }
+
+  h1, h2, h3, p, dl, dd, figure { margin: 0; }
+  ul, ol { margin: 0; padding: 0; list-style: none; }
+  a { color: inherit; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+  a:hover { color: var(--accent-ink); text-decoration-color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  ::selection { background: #ffe1cc; }
+
+  code, .mono {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    letter-spacing: 0.01em;
+  }
+  code {
+    background: var(--code);
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+  }
+
+  /* header */
+  .site-title {
+    display: flex; align-items: baseline; gap: 10px;
+    font-family: var(--font-mono); font-size: 0.9rem; font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .site-title a { text-decoration: none; }
+  .site-title a:hover { color: var(--ink); }
+  .site-title::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .nav { margin-top: 14px; }
+  .nav ul { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+  .nav a {
+    font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.02em;
+    color: var(--muted); text-decoration: none;
+  }
+  .nav a:hover { color: var(--accent-ink); text-decoration: underline; }
+
+  hr {
+    height: 0; margin: 40px 0 0; border: 0;
+    border-top: 1px solid var(--line);
+  }
+  .rule { margin: 0 0 40px; }
+
+  /* intro */
+  .intro { margin-top: 40px; }
+  .intro h1 {
+    font-size: clamp(1.5rem, 4vw, 1.9rem);
+    font-weight: 800; line-height: 1.4; letter-spacing: 0.01em;
+  }
+  .intro__role { margin-top: 2px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+  .intro blockquote {
+    margin: 24px 0 0; padding: 2px 0 2px 16px;
+    border-left: 2px solid var(--line);
+    color: var(--muted); font-size: 0.95rem;
+  }
+
+  .meta { margin-top: 24px; }
+  .meta div { display: flex; gap: 12px; font-family: var(--font-mono); font-size: 0.76rem; line-height: 1.9; }
+  .meta dt { flex: 0 0 6.5em; color: var(--faint); }
+  .meta dd { color: var(--ink); }
+
+  /* sections */
+  section { margin-top: 48px; }
+  .h2 {
+    display: flex; align-items: baseline; gap: 8px;
+    font-size: 1.3rem; font-weight: 800; line-height: 1.5;
+    scroll-margin-top: 24px;
+  }
+  .h2 .hash { font-family: var(--font-mono); font-size: 0.8em; font-weight: 400; color: var(--faint); letter-spacing: 0; }
+  .h3 {
+    margin-top: 28px; font-size: 1rem; font-weight: 700; line-height: 1.6;
+  }
+  section > p, section > ul { margin-top: 14px; }
+  .lede { color: var(--muted); font-size: 0.92rem; }
+
+  ul.list { margin-top: 12px; }
+  ul.list > li {
+    position: relative; padding-left: 1.2em; margin-top: 6px;
+    font-size: 0.92rem;
+  }
+  ul.list > li::before { content: "-"; position: absolute; left: 0; color: var(--faint); font-family: var(--font-mono); }
+
+  /* about */
+  .about p + p { margin-top: 12px; }
+
+  /* works */
+  .works { margin-top: 20px; }
+  .work { display: flex; gap: 16px; padding: 18px 0; border-top: 1px solid var(--line); }
+  .work:last-child { border-bottom: 1px solid var(--line); }
+  .work__thumb {
+    flex: 0 0 148px; aspect-ratio: 4 / 3; align-self: flex-start;
+    display: grid; place-items: center;
+    background: var(--code); border: 1px solid var(--line); border-radius: 2px;
+    font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.08em; color: var(--faint);
+    text-decoration: none;
+  }
+  .work h3 { font-size: 0.95rem; font-weight: 700; line-height: 1.6; }
+  .work h3 a { text-decoration: none; }
+  .work h3 a:hover { text-decoration: underline; }
+  .work p { margin-top: 4px; font-size: 0.85rem; color: var(--muted); }
+  .work .meta-line { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-top: 6px; font-size: 0.75rem; }
+  .work .meta-line code { font-size: 0.72rem; }
+  .work .meta-line a { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.02em; }
+
+  /* articles */
+  .articles { margin-top: 12px; }
+  .articles li { padding: 8px 0; font-size: 0.92rem; }
+  .articles .date { font-family: var(--font-mono); font-size: 0.74rem; color: var(--faint); margin-right: 8px; }
+  .articles .src { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); margin-left: 8px; white-space: nowrap; }
+  .articles .src::before { content: "· "; color: var(--line); }
+  .articles .arrow { font-family: var(--font-mono); font-size: 0.8rem; color: var(--faint); margin-left: 4px; }
+  .more { margin-top: 14px; font-family: var(--font-mono); font-size: 0.72rem; }
+  .more a { margin-right: 18px; }
+
+  /* links */
+  .links li { padding: 6px 0; font-size: 0.92rem; }
+  .links .label { font-weight: 600; }
+  .links .handle { font-family: var(--font-mono); font-size: 0.74rem; color: var(--muted); margin-left: 10px; }
+
+  /* footer */
+  footer { margin-top: 56px; }
+  .footer { display: flex; flex-wrap: wrap; gap: 8px 20px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+  .footer nav { display: flex; gap: 16px; margin-left: auto; }
+  .footer a { text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 560px) {
+    .doc { padding: 40px 20px 72px; }
+    .work { flex-direction: column; }
+    .work__thumb { flex: none; width: 200px; }
+    .footer nav { margin-left: 0; width: 100%; }
+
+    /* lighter, fewer decorations on small screens */
+    .bg {
+      height: min(100vh, 760px);
+      background-image:
+        radial-gradient(80vw 44vw at -12% -6%, rgba(221, 242, 247, 0.7), rgba(221, 242, 247, 0) 70%),
+        radial-gradient(46vw 26vw at 8% 0%, rgba(248, 224, 232, 0.35), rgba(248, 224, 232, 0) 70%),
+        radial-gradient(70vw 38vw at 112% -2%, rgba(255, 241, 201, 0.75), rgba(255, 241, 201, 0) 72%),
+        radial-gradient(60vw 40vw at 118% 44%, rgba(248, 224, 232, 0.32), rgba(248, 224, 232, 0) 70%),
+        radial-gradient(circle at 4% 12%, rgba(246, 195, 212, 0.9) 0 2.5px, transparent 3px),
+        radial-gradient(circle at 95% 7%, rgba(255, 228, 166, 0.95) 0 3px, transparent 3.5px);
+    }
+    .bg::after { display: none; }
+    body::before { opacity: 0.035; }
+  }
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"></div>
+<div class="doc">
+
+  <header>
+    <p class="site-title"><a href="#top">ricezero</a></p>
+    <nav class="nav" aria-label="セクション">
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#works">Works</a></li>
+        <li><a href="#articles">Articles</a></li>
+        <li><a href="#links">Links</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <hr />
+
+  <main id="top">
+
+    <div class="intro">
+      <h1>山田 太郎</h1>
+      <p class="intro__role">Student / Software Engineer</p>
+      <blockquote>
+        Web のフロントエンドからクラウドのインフラまで、触って確かめて作るのが好きな学生です。
+        小さくても最後まで動くものを出し、使われた記録を次の設計に還元することを大切にしています。
+      </blockquote>
+      <dl class="meta">
+        <div><dt>affiliation</dt><dd>〇〇大学 情報工学部 情報工学専攻 / 2027年3月 卒業予定</dd></div>
+        <div><dt>location</dt><dd>Tokyo, Japan</dd></div>
+        <div><dt>status</dt><dd>Open to internships</dd></div>
+      </dl>
+    </div>
+
+    <section id="about" aria-labelledby="about-title">
+      <h2 class="h2" id="about-title"><span class="hash" aria-hidden="true">##</span>About</h2>
+      <div class="about">
+        <p>
+          大学では分散システムとデータベースを専攻しています。研究の傍ら、Web アプリケーションと
+          その運用基盤を作ることが多く、フロントエンドの設計から Cloudflare 上のデプロイまでを一通り担当します。
+        </p>
+        <p>
+          直近は SvelteKit と Cloudflare Workers を使った軽量な Web サイトの構築に取り組んでいます。
+          「速いこと」は機能のひとつだと考え、バンドルサイズや描画を計測しながら実装を進めています。
+        </p>
+      </div>
+      <h3 class="h3">興味のある領域</h3>
+      <ul class="list">
+        <li>Web フロントエンド設計とパフォーマンス</li>
+        <li>エッジコンピューティングとサーバーレス</li>
+        <li>分散システム・データベース internals</li>
+      </ul>
+    </section>
+
+    <section id="skills" aria-labelledby="skills-title">
+      <h2 class="h2" id="skills-title"><span class="hash" aria-hidden="true">##</span>Skills</h2>
+      <p class="lede">「触ったことがある」ではなく、何を作ったかで示します。括弧内は経験年数の目安です。</p>
+
+      <h3 class="h3">Languages</h3>
+      <ul class="list">
+        <li><strong>TypeScript</strong> (3y) — Web アプリ全般。型で設計を固めてから書く。</li>
+        <li><strong>Go</strong> (2y) — REST API と CLI ツール。並行処理の学習にも。</li>
+        <li><strong>Python</strong> (3y) — 研究のデータ処理・スクリプト。</li>
+        <li><strong>SQL</strong> (2y) — PostgreSQL を中心に、クエリ設計と計測。</li>
+      </ul>
+
+      <h3 class="h3">Frameworks / Infrastructure / Tools</h3>
+      <ul class="list">
+        <li><strong>SvelteKit</strong> (2y) — SSR / SSG の使い分けと軽量実装。</li>
+        <li><strong>Svelte 5</strong> (1y) — Runes を使った状態管理。</li>
+        <li><strong>Hono</strong> (1y) — Workers 上の API 実装。</li>
+        <li><strong>Cloudflare</strong> (2y) — Workers / R2 / Cache API での配信設計。</li>
+        <li><strong>Docker</strong> (2y) — ローカル開発環境とデプロイ再現性。</li>
+        <li><strong>Git / GitHub</strong> (4y) — Issue 駆動の個人開発とレビュー。</li>
+      </ul>
+    </section>
+
+    <section id="experience" aria-labelledby="experience-title">
+      <h2 class="h2" id="experience-title"><span class="hash" aria-hidden="true">##</span>Experience</h2>
+
+      <h3 class="h3">株式会社〇〇 サマーインターンシップ</h3>
+      <p class="lede"><code>2026.08 — 2026.09</code> Backend Engineer Intern</p>
+      <p>社内 API のリファクタリングを担当。レスポンスを計測し、N+1 の解消とキャッシュ導入で p95 を約40%短縮しました。</p>
+
+      <h3 class="h3">〇〇ハッカソン 2026</h3>
+      <p class="lede"><code>2026.03</code> Team of 4 / Frontend &amp; Infra</p>
+      <p>SvelteKit と Cloudflare Workers で地域イベントの情報共有アプリを開発。24時間で実装から公開まで完了し、優秀賞を受賞しました。</p>
+
+      <h3 class="h3">〇〇大学 情報工学部</h3>
+      <p class="lede"><code>2024.04 — Present</code> Undergraduate / Distributed Systems Lab</p>
+      <p>分散システム研究室に所属。レプリケーションと一貫性モデルをテーマに、実験用の小規模ストレージを実装しています。</p>
+    </section>
+
+    <section id="works" aria-labelledby="works-title">
+      <h2 class="h2" id="works-title"><span class="hash" aria-hidden="true">##</span>Works</h2>
+      <p class="lede">設計の意図と、詰まったところは詳細ページに書いています。</p>
+
+      <div class="works">
+        <article class="work">
+          <a class="work__thumb" href="#works" aria-hidden="true" tabindex="-1">THUMBNAIL</a>
+          <div>
+            <h3><a href="#works">軽量ポートフォリオサイト</a></h3>
+            <p>SvelteKit と Cloudflare Workers / R2 で構築した1ページ完結のサイト。初期 JS は 20KB 台。</p>
+            <p class="meta-line"><code>SvelteKit</code><code>Cloudflare</code><a href="#works">View case →</a></p>
+          </div>
+        </article>
+        <article class="work">
+          <a class="work__thumb" href="#works" aria-hidden="true" tabindex="-1">THUMBNAIL</a>
+          <div>
+            <h3><a href="#works">イベント情報共有 API</a></h3>
+            <p>ハッカソンで開発。重複登録を DB 制約で防ぎ、読み取りはキャッシュに逃がす構成。</p>
+            <p class="meta-line"><code>Go</code><code>PostgreSQL</code><a href="#works">View case →</a></p>
+          </div>
+        </article>
+        <article class="work">
+          <a class="work__thumb" href="#works" aria-hidden="true" tabindex="-1">THUMBNAIL</a>
+          <div>
+            <h3><a href="#works">ミニ Key-Value Store</a></h3>
+            <p>WAL と簡易なレプリケーションを実装し、一貫性モデルの挙動を手元で確認できるように。</p>
+            <p class="meta-line"><code>Rust</code><a href="#works">View case →</a></p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="articles" aria-labelledby="articles-title">
+      <h2 class="h2" id="articles-title"><span class="hash" aria-hidden="true">##</span>Articles</h2>
+      <p class="lede">Qiita とはてなブログに書いた記事です。</p>
+      <ul class="articles">
+        <li>
+          <span class="date">2026-10-28</span><a href="#articles">Cloudflare Workers で RSS を取得してエッジキャッシュする</a><span class="src">Qiita</span><span class="arrow" aria-hidden="true">↗</span>
+        </li>
+        <li>
+          <span class="date">2026-09-12</span><a href="#articles">インターンで学んだ、計測してから直すということ</a><span class="src">Hatena</span><span class="arrow" aria-hidden="true">↗</span>
+        </li>
+        <li>
+          <span class="date">2026-08-03</span><a href="#articles">SvelteKit のバンドルを 40% 削った話</a><span class="src">Qiita</span><span class="arrow" aria-hidden="true">↗</span>
+        </li>
+        <li>
+          <span class="date">2026-06-21</span><a href="#articles">分散システムの授業で作った小さなレプリカ</a><span class="src">Hatena</span><span class="arrow" aria-hidden="true">↗</span>
+        </li>
+        <li>
+          <span class="date">2026-05-09</span><a href="#articles">CSS Scroll Snap だけでカルーセルを作る</a><span class="src">Qiita</span><span class="arrow" aria-hidden="true">↗</span>
+        </li>
+      </ul>
+      <p class="more"><a href="#articles">More on Qiita ↗</a><a href="#articles">More on Hatena ↗</a></p>
+    </section>
+
+    <section id="links" aria-labelledby="links-title">
+      <h2 class="h2" id="links-title"><span class="hash" aria-hidden="true">##</span>Links</h2>
+      <p class="lede">お仕事・インターンのご連絡はメールか X の DM まで。</p>
+      <ul class="links">
+        <li><a class="label" href="#links">GitHub</a><span class="handle">@ricezero</span></li>
+        <li><a class="label" href="#links">Qiita</a><span class="handle">@ricezero</span></li>
+        <li><a class="label" href="#links">Hatena Blog</a><span class="handle">blog.ricezero</span></li>
+        <li><a class="label" href="#links">Email</a><span class="handle">hello@example.com</span></li>
+      </ul>
+    </section>
+
+    <hr />
+
+    <footer>
+      <div class="footer">
+        <span>© 2026 ricezero</span>
+        <nav aria-label="フッター">
+          <a href="#privacy">Privacy</a>
+          <a href="#top">Top</a>
+        </nav>
+      </div>
+    </footer>
+
+  </main>
+</div>
+</body>
+</html>
