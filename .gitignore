@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+
+# build output
+.svelte-kit/
+build/
+dist/
+
+# cloudflare
+.wrangler/
+.dev.vars
+.dev.vars.*
+
+# env
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+
+# editors / os
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# tooling artifacts
+.playwright-mcp/
+coverage/
